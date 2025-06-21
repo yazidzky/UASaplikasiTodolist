@@ -54,13 +54,7 @@ Aplikasi **To-Do List** berbasis web untuk membantu kamu mengelola tugas harian 
 Pastikan kamu sudah install:
 - Java JDK 17+
 - Maven 3.8+
-
-### Jalankan
-```bash
-git clone https://github.com/username/todolist-app.git
-cd todolist-app
-mvn spring-boot:run
-
+- 
 📡 API Endpoint
 Method	Path	Deskripsi
 GET	/tasks	Tampilkan semua tugas
@@ -75,3 +69,11 @@ GET	/tasks/urgent	Tugas yang mendekati deadline
 
 🖼️ Screenshot
 ![image](https://github.com/user-attachments/assets/0e5d5c0a-d85d-45bd-9def-407c0817277e)
+
+### Jalankan
+```bash
+git clone https://github.com/username/todolist-app.git
+cd todolist-app
+mvn spring-boot:run
+
+
