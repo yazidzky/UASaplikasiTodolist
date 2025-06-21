@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Error Page</title>
+    <style>
+      .error-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 1px solid #ff4444;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <h1 th:text="${errorTitle} ?: 'Error Page'"></h1>
+      <p><b>Status:</b> <span th:text="${status} ?: 'N/A'"></span></p>
+      <p>
+        <b>Pesan Error:</b>
+        <span th:text="${errorMessage} ?: 'Tidak ada pesan error'"></span>
+      </p>
+      <a href="/tasks">Kembali ke Aplikasi</a>
+    </div>
+  </body>
+</html>

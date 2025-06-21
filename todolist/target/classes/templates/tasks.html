@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creative To-Do List</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="time-display">
+          <div class="clock-container">
+            <div class="clock">
+              <div class="time" id="currentTime"></div>
+              <div class="date" id="currentDate"></div>
+            </div>
+            <div class="today-tasks" th:if="${not #lists.isEmpty(todayTasks)}">
+              <div class="today-tasks-header">
+                <i class="fas fa-tasks"></i>
+                <span>Today's Tasks</span>
+              </div>
+              <div class="today-tasks-list">
+                <div th:each="task : ${todayTasks}" class="today-task-item">
+                  <span
+                    class="task-time"
+                    th:text="${#temporals.format(task.dueDate, 'HH:mm')}"
+                  ></span>
+                  <span class="task-title" th:text="${task.title}"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h1>My Creative To-Do List</h1>
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-number" th:text="${pendingTasksCount}">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" th:text="${completedTasksCount}">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-form">
+        <form th:action="@{/tasks}" th:object="${newTask}" method="post">
+          <input
+            type="text"
+            th:field="*{title}"
+            placeholder="What needs to be done?"
+            required
+          />
+          <textarea
+            th:field="*{description}"
+            placeholder="Description (optional)"
+          ></textarea>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dueDate">Due Date:</label>
+              <input type="datetime-local" th:field="*{dueDate}" id="dueDate" />
+            </div>
+            <div class="form-group">
+              <label for="priority">Priority:</label>
+              <select th:field="*{priority}" id="priority">
+                <option value="">Select Priority</option>
+                <option
+                  th:each="priority : ${T(com.example.todolist.model.Task.Priority).values()}"
+                  th:value="${priority}"
+                  th:text="${priority}"
+                ></option>
+              </select>
+            </div>
+            <button type="submit" class="btn-add">
+              <i class="fas fa-plus"></i> Add Task
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="filters">
+        <a
+          th:href="@{/tasks}"
+          class="btn-filter"
+          th:classappend="${filter == 'all'} ? 'active'"
+          >All</a
+        >
+        <a
+          th:href="@{/tasks/pending}"
+          class="btn-filter"
+          th:classappend="${filter == 'pending'} ? 'active'"
+          >Pending</a
+        >
+        <a
+          th:href="@{/tasks/completed}"
+          class="btn-filter"
+          th:classappend="${filter == 'completed'} ? 'active'"
+          >Completed</a
+        >
+
+        <div class="priority-filters">
+          <span>Priority:</span>
+          <a
+            th:href="@{/tasks/priority/HIGH}"
+            class="btn-filter priority-high"
+            th:classappend="${filter == 'HIGH'} ? 'active'"
+            >High</a
+          >
+          <a
+            th:href="@{/tasks/priority/MEDIUM}"
+            class="btn-filter priority-medium"
+            th:classappend="${filter == 'MEDIUM'} ? 'active'"
+            >Medium</a
+          >
+          <a
+            th:href="@{/tasks/priority/LOW}"
+            class="btn-filter priority-low"
+            th:classappend="${filter == 'LOW'} ? 'active'"
+            >Low</a
+          >
+        </div>
+
+        <form th:action="@{/tasks/search}" method="get" class="search-form">
+          <input type="text" name="keyword" placeholder="Search tasks..." />
+          <button type="submit" class="btn-search">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="task-list">
+        <div
+          th:each="task : ${tasks}"
+          class="task-card"
+          th:classappend="${task.completed} ? 'completed' : ''"
+          th:attr="data-priority=${task.priority}"
+        >
+          <div class="task-checkbox">
+            <form
+              th:action="@{'/tasks/' + ${task.id} + '/toggle'}"
+              method="post"
+            >
+              <button type="submit" class="checkbox-btn">
+                <i
+                  th:class="${task.completed} ? 'fas fa-check-circle' : 'far fa-circle'"
+                ></i>
+              </button>
+            </form>
+          </div>
+          <div class="task-content">
+            <h3 th:text="${task.title}">Task Title</h3>
+            <p th:text="${task.description} ?: 'No description'">
+              Task description
+            </p>
+            <div class="task-meta">
+              <span
+                class="task-date"
+                th:if="${task.dueDate}"
+                th:text="${#temporals.format(task.dueDate, 'MMM dd, yyyy HH:mm')}"
+              ></span>
+              <span class="task-priority" th:text="${task.priority}"></span>
+            </div>
+          </div>
+          <div class="task-actions">
+            <form
+              th:action="@{'/tasks/' + ${task.id} + '/delete'}"
+              method="post"
+            >
+              <button type="submit" class="btn-delete">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(tasks)}" class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <p>No tasks found. Add a new task to get started!</p>
+        </div>
+      </div>
+    </div>
+
+    <script th:src="@{/js/script.js}"></script>
+  </body>
+</html>
