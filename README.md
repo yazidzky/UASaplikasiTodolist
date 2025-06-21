@@ -60,3 +60,18 @@ Pastikan kamu sudah install:
 git clone https://github.com/username/todolist-app.git
 cd todolist-app
 mvn spring-boot:run
+
+📡 API Endpoint
+Method	Path	Deskripsi
+GET	/tasks	Tampilkan semua tugas
+POST	/tasks	Tambah tugas baru
+POST	/tasks/{id}/toggle	Tandai tugas selesai/belum selesai
+POST	/tasks/{id}/delete	Hapus tugas
+GET	/tasks/completed	Tugas yang sudah selesai
+GET	/tasks/pending	Tugas yang belum selesai
+GET	/tasks/priority/{p}	Filter berdasarkan prioritas
+GET	/tasks/search?q=...	Cari tugas berdasarkan keyword
+GET	/tasks/urgent	Tugas yang mendekati deadline
+
+🖼️ Screenshot
+![image](https://github.com/user-attachments/assets/0e5d5c0a-d85d-45bd-9def-407c0817277e)
