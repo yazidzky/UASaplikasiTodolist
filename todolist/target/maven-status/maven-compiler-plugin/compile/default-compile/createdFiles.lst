@@ -1,0 +1,8 @@
+com\example\todolist\model\Task$Priority.class
+com\example\todolist\TodolistApplication.class
+com\example\todolist\controller\TaskController.class
+com\example\todolist\service\TaskService.class
+com\example\todolist\exception\GlobalExceptionHandler.class
+com\example\todolist\repository\TaskRepository.class
+com\example\todolist\exception\TaskNotFoundException.class
+com\example\todolist\model\Task.class
